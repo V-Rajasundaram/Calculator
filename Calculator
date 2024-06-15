@@ -1,0 +1,158 @@
+CODESOFT Task 1
+
+Calculator
+
+HTML code:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="codsoft.css">
+</head>
+<body>
+
+    <div class="calculator">
+        <div id="display" class="display">0</div>
+        <button class="btn" data-value="7">7</button>
+        <button class="btn" data-value="8">8</button>
+        <button class="btn" data-value="9">9</button>
+        <button class="btn" data-value="/">/</button>
+        <button class="btn" data-value="4">4</button>
+        <button class="btn" data-value="5">5</button>
+        <button class="btn" data-value="6">6</button>
+        <button class="btn" data-value="*">x</button>
+        <button class="btn" data-value="1">1</button>
+        <button class="btn" data-value="2">2</button>
+        <button class="btn" data-value="3">3</button>
+        <button class="btn" data-value="-">-</button>
+        <button class="btn" data-value="0">0</button>
+        <button class="btn" data-value=".">.</button>
+        <button class="btn" data-value="=">=</button>
+        <button class="btn" data-value="+">+</button>
+        <button class="btn" data-value="C">C</button>
+    </div>
+    <script src="codesoft.js"></script>
+</body>
+</html>
+
+CSS code:
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #042940;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.calculator {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #005C53;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.display {
+    grid-column: span 4;
+    background-color: #69aa35;
+    color: #fff;
+    font-size: 2rem;
+    text-align: right;
+    padding: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.btn {
+    background-color: #edf4b8;
+    border: none;
+    padding: 20px;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #c5eae7;
+}
+
+.btn[data-value="="] {
+    background-color: #ff9500;
+    color: #fff;
+}
+
+.btn[data-value="="]:hover {
+    background-color: #e08500;
+}
+
+.btn[data-value="C"] {
+    background-color: #ff3b30;
+    color: #fff;
+}
+
+.btn[data-value="C"]:hover {
+    background-color: #e02b20;
+}
+
+Javascript code:
+document.addEventListener('DOMContentLoaded', function() {
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('.btn');
+    let currentInput = '';
+    let operator = '';
+    let firstOperand = null;
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+
+            if (value === 'C') {
+                currentInput = '';
+                operator = '';
+                firstOperand = null;
+                display.innerText = '0';
+            } else if (value === '=') {
+                if (firstOperand !== null && operator !== '' && currentInput !== '') {
+                    const secondOperand = parseFloat(currentInput);
+                    currentInput = '';
+                    let result;
+                    switch (operator) {
+                        case '+':
+                            result = firstOperand + secondOperand;
+                            break;
+                        case '-':
+                            result = firstOperand - secondOperand;
+                            break;
+                        case '*':
+                            result = firstOperand * secondOperand;
+                            break;
+                        case '/':
+                            result = firstOperand / secondOperand;
+                            break;
+                    }
+                    display.innerText = result;
+                    firstOperand = result;
+                    operator = '';
+                }
+            } else if (['+', '-', '*', '/'].includes(value)) {
+                if (currentInput !== '') {
+                    firstOperand = parseFloat(currentInput);
+                    currentInput = '';
+                    operator = value;
+                }
+            } else {
+                currentInput += value;
+                display.innerText = currentInput;
+            }
+        });
+    });
+});
+
